@@ -11,6 +11,7 @@ const links = [
   { to: '/follow-ups', label: 'محتاجين متابعة', icon: '⏰' },
   { to: '/followed-up', label: 'تمت متابعتهم', icon: '✅' },
   { to: '/backup', label: 'النسخ الاحتياطي', icon: '💾' },
+  { to: '/change-password', label: 'تغيير كلمة السر', icon: '🔑' },
 ]
 
 export default function Layout({ children }) {

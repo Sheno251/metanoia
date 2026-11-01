@@ -4,6 +4,7 @@ import { supabase } from './lib/supabase'
 import Layout from './components/Layout'
 import Login from './pages/Login'
 import ResetPassword from './pages/ResetPassword'
+import ChangePassword from './pages/ChangePassword'
 import Dashboard from './pages/Dashboard'
 import People from './pages/People'
 import PersonForm from './pages/PersonForm'
@@ -19,7 +20,6 @@ export default function App() {
   const [session, setSession] = useState(undefined)
   const location = useLocation()
 
-  // لو الرابط فيه علامات استعادة باسورد، منعرضهوش في الـ Layout
   const isRecoveryPath =
     location.pathname === '/reset-password' ||
     (window.location.hash || '').includes('type=recovery') ||
@@ -33,7 +33,6 @@ export default function App() {
     return () => sub.subscription.unsubscribe()
   }, [])
 
-  // مسار الاستعادة دايماً متاح (سواء فيه session أو لأ)
   if (isRecoveryPath) {
     return (
       <Routes>
@@ -70,6 +69,7 @@ export default function App() {
         <Route path="/follow-ups" element={<FollowUps />} />
         <Route path="/followed-up" element={<FollowedUp />} />
         <Route path="/backup" element={<Backup />} />
+        <Route path="/change-password" element={<ChangePassword />} />
         <Route
           path="/login"
           element={<Navigate to="/" replace state={{ from: location }} />}

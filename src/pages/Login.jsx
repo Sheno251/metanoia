@@ -15,6 +15,18 @@ export default function Login() {
   const [confirmPassword, setConfirmPassword] = useState('')
 
   useEffect(() => {
+    // 1) فحص مباشر للرابط (الأهم) – بيمسك لينك الاستعادة قبل أي حاجة
+    const hash = window.location.hash || ''
+    const search = window.location.search || ''
+    if (
+      hash.includes('type=recovery') ||
+      search.includes('type=recovery') ||
+      hash.includes('access_token')
+    ) {
+      setIsRecovery(true)
+    }
+
+    // 2) الاستماع لحدث Supabase كاحتياطي
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (event) => {
         if (event === 'PASSWORD_RECOVERY') {
@@ -77,10 +89,12 @@ export default function Login() {
       setNewPassword('')
       setConfirmPassword('')
       await supabase.auth.signOut()
+      // ننضف الرابط من hash عشان لو عمل refresh ميفضلش في وضع الاستعادة
+      window.history.replaceState(null, '', window.location.pathname)
     }
   }
 
-  // ===== شاشة تغيير الباسورد (بعد الضغط على لينك الاستعادة) =====
+  // ===== شاشة تغيير الباسورد =====
   if (isRecovery) {
     return (
       <div className="login-screen">
@@ -132,6 +146,7 @@ export default function Login() {
               onClick={async () => {
                 await supabase.auth.signOut()
                 setIsRecovery(false)
+                window.history.replaceState(null, '', window.location.pathname)
               }}
             >
               إلغاء

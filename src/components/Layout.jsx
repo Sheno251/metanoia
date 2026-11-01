@@ -33,6 +33,7 @@ export default function Layout({ children }) {
           <span className="brand-main">METANOIA</span>
           <span className="brand-sub">ميتانويا</span>
         </div>
+
         <nav className="sidebar-nav">
           {links.map(l => (
             <NavLink
@@ -48,9 +49,10 @@ export default function Layout({ children }) {
             </NavLink>
           ))}
         </nav>
+
         <button className="sidebar-logout" onClick={logout}>
           <span className="sidebar-icon">🚪</span>
-          <span>خروج</span>
+          <span>تسجيل الخروج</span>
         </button>
       </aside>
 
@@ -130,7 +132,7 @@ export default function Layout({ children }) {
                 }}
               >
                 <span className="sidebar-icon">🚪</span>
-                <span>خروج</span>
+                <span>تسجيل الخروج</span>
               </button>
             </div>
           </>

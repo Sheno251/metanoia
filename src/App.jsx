@@ -3,6 +3,7 @@ import { Routes, Route, Navigate, useLocation } from 'react-router-dom'
 import { supabase } from './lib/supabase'
 import Layout from './components/Layout'
 import Login from './pages/Login'
+import ResetPassword from './pages/ResetPassword'
 import Dashboard from './pages/Dashboard'
 import People from './pages/People'
 import PersonForm from './pages/PersonForm'
@@ -18,6 +19,12 @@ export default function App() {
   const [session, setSession] = useState(undefined)
   const location = useLocation()
 
+  // لو الرابط فيه علامات استعادة باسورد، منعرضهوش في الـ Layout
+  const isRecoveryPath =
+    location.pathname === '/reset-password' ||
+    (window.location.hash || '').includes('type=recovery') ||
+    (window.location.search || '').includes('type=recovery')
+
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => setSession(data.session))
     const { data: sub } = supabase.auth.onAuthStateChange((_e, s) => {
@@ -25,6 +32,16 @@ export default function App() {
     })
     return () => sub.subscription.unsubscribe()
   }, [])
+
+  // مسار الاستعادة دايماً متاح (سواء فيه session أو لأ)
+  if (isRecoveryPath) {
+    return (
+      <Routes>
+        <Route path="/reset-password" element={<ResetPassword />} />
+        <Route path="*" element={<Navigate to="/reset-password" replace />} />
+      </Routes>
+    )
+  }
 
   if (session === undefined) {
     return <div className="loading">جاري التحميل…</div>
